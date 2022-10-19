@@ -14,7 +14,7 @@ plt.rcParams['figure.dpi'] = 300
 
 sns.set_theme(style="darkgrid")
 
-df = pd.read_excel(r"D:\pre_grad_research\MantleWater\HDiff-XAI\all_data_20220606.xlsx", sheet_name='train')
+df = pd.read_excel("./dataset/all_data_20220606.xlsx", sheet_name='train')
 # df = df[df['train_test'] == 0]
 
 # 0, 1
@@ -33,7 +33,7 @@ ax.set_ylabel("H$_{2}$O (ppm)")
 
 plt.tight_layout()
 
-plt.savefig("./feature_dist.png")
+plt.savefig("./feature_dist.png")  # TODO: customized
 plt.show()
 
 # figure,ax=plt.subplots(2,2)

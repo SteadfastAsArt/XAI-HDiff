@@ -36,7 +36,7 @@ m.drawmeridians(meridians, labels=[True, False, True, True], fontsize=25, zorder
 
 # my_dataset = pd.read_excel(r"D:\pre_grad_research\MantleWater\HDiff-XAI\data_all_aug02.xlsx")
 # my_dataset = pd.read_excel(r"D:\pre_grad_research\MantleWater\HDiff-XAI\all_data_1221_01.xlsx")
-my_dataset = pd.read_excel(r"D:\pre_grad_research\MantleWater\HDiff-XAI\all_data_20220606.xlsx", sheet_name='all')
+my_dataset = pd.read_excel("./dataset/all_data_20220606.xlsx", sheet_name='all')
 # 读取数据表
 # lon, lat = m(df['lon'], df['lat'])   # TODO: custom dataset here!!!
 # lon, lat为给定的经纬度，可以使单个的，也可以是列表
