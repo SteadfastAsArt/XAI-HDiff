@@ -23,8 +23,12 @@ logging.basicConfig(filename='tmp.log',
 class DataManager:
     def __init__(self, data_path, sheet_name=0):
         """_:protected, __:private"""
+        logging.info('%s read file start' % self.__class__.__name__)
         self._data_all = read_file(data_path, sheet_name=sheet_name)
+        logging.info('%s read file end' % self.__class__.__name__)
         print(self._data_all.info())
+        logging.info('{} Stats for {}:'.format(self.__class__.__name__, data_path))
+        logging.info(self._data_all.info())
         self._X_col = None  # X-column names
         self._y_col = None  # y-column name
         self._data_X = None  #
@@ -82,12 +86,15 @@ class DataManager:
             data_y = self._data_all[self._y_col]
             self._data_y = data_y
             print('Stats for data_y:', Counter(data_y))
+            logging.info('{} Stats for data_y: {}'.format(self.__class__.__name__, Counter(data_y)))
 
     def impute(self, neighbor_cnt):
+        logging.info('{} Imputation start'.format(self.__class__.__name__))
         imputer = KNNImputer(n_neighbors=neighbor_cnt)
         np_imp = imputer.fit_transform(self._data_X)
         data_X_imp = pd.DataFrame(data=np_imp, columns=self._X_col)
         self._data_X = data_X_imp
+        logging.info('{} Imputation results: {}'.format(self.__class__.__name__, self._data_X.info()))
         print(self._data_X.info())
 
     def normalize(self, minmax: tuple = None):
@@ -114,6 +121,8 @@ class DataManager:
                                                                                     random_state=SEED)
         print('Training X:', self._X_train.shape, 'Testing X:', self._X_test.shape)
         print('Training Y:', self._y_train.shape, 'Testing y:', self._y_test.shape)
+        logging.info('Training X:', self._X_train.shape, 'Testing X:', self._X_test.shape)
+        logging.info('Training Y:', self._y_train.shape, 'Testing y:', self._y_test.shape)
 
 
 class ModelBuilder:
