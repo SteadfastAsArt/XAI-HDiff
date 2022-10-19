@@ -2,18 +2,17 @@
 # @Time    : 2022/4/15 15:55
 # @File    : main_xgb_opt.py
 from models import DataManager, ModelBuilder, SHAPExplainer
-import xgboost as xgb
 from utils import *
 import numpy as np
 
-plt.rcParams['savefig.dpi'] = 600  # 图片像素
-plt.rcParams['figure.dpi'] = 600  # 分辨率
+plt.rcParams['savefig.dpi'] = 600
+plt.rcParams['figure.dpi'] = 600
 
 SEED = 42
 # np.random.seed(SEED)
-base_path = './model_test/'
+base_path = './output/'  # TODO: customized
 
-dMana = DataManager(r"D:\pre_grad_research\MantleWater\HDiff-XAI\all_data_20220606.xlsx", sheet_name='train')
+dMana = DataManager("./dataset/all_data_20220606.xlsxx", sheet_name='train')
 dMana.choose_X_y([10, 11, 12, 13, 14, 15, 16, 17, 18, 19], 20)
 dMana.impute(neighbor_cnt=30)
 dMana.split_train_test(ratio=0.2)
@@ -31,10 +30,10 @@ model_svm.initialize()
 # model_xgb.train(dMana, usedata='all')
 model_xgb.train(dMana)
 model_xgb.test(dMana)
-# model_xgb.plot_tree(base_path, 5, 'LR')
-# model_xgb.plot_confusion_matrix(base_path, dMana)
-# model_xgb.plot_PDP_ICE(base_path, dMana.X_train)
-# model_xgb.plot_importance(base_path)
+model_xgb.plot_tree(base_path, 5, 'LR')
+model_xgb.plot_confusion_matrix(base_path, dMana)
+model_xgb.plot_PDP_ICE(base_path, dMana.X_train)
+model_xgb.plot_importance(base_path)
 
 ## SVM - norm
 # dMana_norm = DataManager(r"D:\pre_grad_research\MantleWater\HDiff-XAI\all_data_20220606.xlsx", sheet_name='train')
@@ -48,10 +47,10 @@ model_xgb.test(dMana)
 
 """Inference"""
 # XGBoost - non-norm
-dMana_infer = DataManager(r"D:\pre_grad_research\MantleWater\HDiff-XAI\all_data_20220606.xlsx", sheet_name='app')
+dMana_infer = DataManager("./dataset/all_data_20220606.xlsx", sheet_name='app')
 dMana_infer.choose_X_y([10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
-# model_xgb.predict(dMana_infer, 'XGB_label')
-# dMana_infer.data_all.out(base_path+'pred.xlsx')
+model_xgb.predict(dMana_infer, 'XGB_label')
+dMana_infer.data_all.out(base_path+'pred.xlsx')
 
 ## SVM - norm
 # dMana_infer_norm = DataManager(r"D:\pre_grad_research\MantleWater\HDiff-XAI\all_data_20220606.xlsx", sheet_name='app')
@@ -60,15 +59,15 @@ dMana_infer.choose_X_y([10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
 # model_svm.predict(dMana_infer_norm, 'SVM_label')
 # dMana_infer_norm.data_all.out('./model/pred_1.xlsx')
 
-"""SHAP train"""
-# shap = SHAPExplainer(model_xgb, dMana, base_path)
-# shap.shap_value('xgb_shap.xlsx')
-# shap.plot_summary()
-# shap.plot_shap_value()
-# shap.shap_interaction_value('xgb_shap_inter.xlsx')
-# shap.plot_interaction()
+"""SHAP train - Feature Level"""
+shap = SHAPExplainer(model_xgb, dMana, base_path)
+shap.shap_value('xgb_shap.xlsx')
+shap.plot_summary()
+shap.plot_shap_value()
+shap.shap_interaction_value('xgb_shap_inter.xlsx')
+shap.plot_interaction()
 
-"""SHAP train"""
+"""SHAP - Sample Level"""
 shap_infer = SHAPExplainer(model_xgb, dMana_infer, base_path)
 shap_infer.shap_value()
 shap_infer.plot_waterfall(np.arange(13, 24))
