@@ -10,13 +10,8 @@ from pandas.core.base import PandasObject
 
 import matplotlib.pyplot as plt
 import seaborn as sns
-from collections import Counter
 
-from imblearn.over_sampling import SMOTE
-from imblearn.under_sampling import RandomUnderSampler
-from imblearn.pipeline import Pipeline
-
-from sklearn.metrics import f1_score, roc_auc_score, accuracy_score, ConfusionMatrixDisplay
+from sklearn.metrics import f1_score, roc_auc_score, accuracy_score
 
 import xgboost as xgb
 
@@ -52,19 +47,19 @@ def out(df: pd.DataFrame, out_path):
 PandasObject.out = out
 
 
-def sampling(data_all, label_all):
-    # define pipeline
-    over = SMOTE(random_state=SEED, sampling_strategy=0.5)  # sampling_strategy=.2 | minor:major
-    under = RandomUnderSampler(random_state=SEED, sampling_strategy=0.8)  # sampling_strategy=.5 | minor:major
-    # steps = [('o', over), ('u', under)]  # ('o', over),
-    # pipeline = Pipeline(steps=steps)
-    # # transform the dataset
-    # data_all, label_all = pipeline.fit_resample(data_all, label_all)
-    data_all, label_all = over.fit_resample(data_all, label_all)
-    data_all, label_all = under.fit_resample(data_all, label_all)
-    print(Counter(label_all))
+# def sampling(data_all, label_all):
+#     # define pipeline
+#     over = SMOTE(random_state=SEED, sampling_strategy=0.5)  # sampling_strategy=.2 | minor:major
+#     under = RandomUnderSampler(random_state=SEED, sampling_strategy=0.8)  # sampling_strategy=.5 | minor:major
+#     # steps = [('o', over), ('u', under)]  # ('o', over),
+#     # pipeline = Pipeline(steps=steps)
+#     # # transform the dataset
+#     # data_all, label_all = pipeline.fit_resample(data_all, label_all)
+#     data_all, label_all = over.fit_resample(data_all, label_all)
+#     data_all, label_all = under.fit_resample(data_all, label_all)
+#     print(Counter(label_all))
 
-    return data_all, label_all
+#     return data_all, label_all
 
 
 def classification_metrics(Y_test, Y_test_pred):
