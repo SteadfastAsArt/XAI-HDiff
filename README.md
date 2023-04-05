@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/500749377.svg)](https://zenodo.org/badge/latestdoi/500749377)
+
 # XAI-HDiff
 
 1. Install dependencies
