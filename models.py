@@ -7,6 +7,8 @@ from utils import *
 from sklearn.impute import KNNImputer
 from sklearn.model_selection import train_test_split
 
+from collections import Counter
+
 import shap
 
 import matplotlib.pyplot as plt
@@ -299,21 +301,25 @@ class SHAPExplainer:
         # matplotlib 3.5 issue
         # plt.gcf().axes[-1].set_aspect(100)
         # plt.gcf().axes[-1].set_box_aspect(100)
-        plt.savefig(self._base_path + 'shap_all_summary.png', bbox_inches='tight')
+        plt.savefig(self._base_path + 'shap_all_summary.pdf', bbox_inches='tight', format='pdf')  # eps, pdf, svg
         plt.close()
 
     def plot_shap_value(self):
+        # for i in self._data_mana.X_col:
+        #     # TODO: hardcode here
+        #     shap.plots.scatter(self._shap_value[:, i], color=self._shap_value[:, RENAME_MAP["H2O"]],
+        #                        show=False)  # show=False | shap_values[:, "H2O"], shap_values
+        #     # plt.gcf().axes[-1].set_aspect(2)
+        #     # plt.gcf().axes[-1].set_box_aspect(1)
+        #     plt.savefig(self._base_path + 'SHAPval_' + i + '_H2O.png', bbox_inches='tight')
+        #     plt.close()
+        # for i in self._data_mana.X_col:
+        #     shap.plots.scatter(self._shap_value[:, i], show=False, color=self._shap_value)
+        #     plt.savefig(self._base_path + 'SHAPval_' + i + '.png', bbox_inches='tight')
+        #     plt.close()
         for i in self._data_mana.X_col:
-            # TODO: hardcode here
-            shap.plots.scatter(self._shap_value[:, i], color=self._shap_value[:, RENAME_MAP["H2O"]],
-                               show=False)  # show=False | shap_values[:, "H2O"], shap_values
-            # plt.gcf().axes[-1].set_aspect(2)
-            # plt.gcf().axes[-1].set_box_aspect(1)
-            plt.savefig(self._base_path + 'SHAPval_' + i + '_H2O.png', bbox_inches='tight')
-            plt.close()
-        for i in self._data_mana.X_col:
-            shap.plots.scatter(self._shap_value[:, i], show=False, color=self._shap_value)
-            plt.savefig(self._base_path + 'SHAPval_' + i + '.png', bbox_inches='tight')
+            shap.plots.scatter(self._shap_value[:, RENAME_MAP["H2O"]], show=False, color=self._shap_value[:, i])
+            plt.savefig(self._base_path + 'SHAPval_H2O_' + i + '.png', bbox_inches='tight')
             plt.close()
 
     def plot_interaction(self):
@@ -335,6 +341,11 @@ class SHAPExplainer:
             shap.plots.waterfall(self._shap_value[i], show=False)
             plt.savefig(self._base_path + 'waterfall/SHAPtrain_{}.png'.format(i), bbox_inches='tight')
             plt.close()
+    
+    def plot_heatmap(self):
+        shap.plots.heatmap(self._shap_value, show=False)
+        plt.savefig(self._base_path + 'heatmap.pdf', bbox_inches='tight', format='pdf')
+        plt.close()
 
 
 class ModelScheduler:
